@@ -1,0 +1,10 @@
+# Godot 4+ cache y archivos generados
+.godot/
+/android/
+
+# Exportaciones
+export_presets.cfg
+*.translation
+
+# Sistema
+.DS_Store
