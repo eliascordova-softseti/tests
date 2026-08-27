@@ -1,8 +1,10 @@
 name: Publicar juego web
 
 on:
+  # Se construye y se prueba en cualquier rama; publicar es otra cosa (ver el
+  # job "deploy").
   push:
-    branches: [main, claude/godot-gato-game-l1nuo3, claude/godot-tetris-menu-axsfn0]
+    branches: ['**']
   workflow_dispatch:
 
 permissions:
@@ -10,8 +12,10 @@ permissions:
   pages: write
   id-token: write
 
+# Una corrida por rama: dos pushes seguidos a la misma rama cancelan la vieja,
+# pero una rama no cancela la corrida de otra.
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -81,6 +85,10 @@ jobs:
 
   deploy:
     needs: build
+    # GitHub Pages sólo deja publicar desde la rama por defecto del repo: el
+    # entorno "github-pages" rechaza el deploy desde cualquier otra. Preguntarle
+    # a la API cuál es evita tener que tocar esto si algún día cambia de nombre.
+    if: github.ref_name == github.event.repository.default_branch
     runs-on: ubuntu-latest
     environment:
       name: github-pages

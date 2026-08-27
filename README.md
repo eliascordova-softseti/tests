@@ -106,12 +106,16 @@ Dos detalles que hacen que funcione en un servidor estatico cualquiera:
 
 ### Publicacion automatica
 
-`.github/workflows/deploy-web.yml` exporta y publica en GitHub Pages en cada push.
-Corre las pruebas de los dos juegos antes de exportar, y cachea Godot para no
-bajar ~900 MB de plantillas en cada corrida.
+`.github/workflows/deploy-web.yml` corre en cada push a cualquier rama: prueba
+los dos juegos, exporta a web y sube el resultado como artefacto. Cachea Godot
+para no bajar ~900 MB de plantillas en cada corrida.
 
-Pages ya quedo habilitado con `Source: GitHub Actions`; el primer deploy se
-autoconfiguro solo.
+El job `deploy` sólo corre en la **rama por defecto** del repo (`main`), porque
+el entorno `github-pages` rechaza los deploys que vienen de otra rama. La
+condición se lee sola de la API (`github.event.repository.default_branch`), así
+que no hay que tocar el workflow si la rama por defecto cambia de nombre.
+
+Pages está habilitado con `Source: GitHub Actions`.
 
 Ojo con el peso: el export son ~35 MB, casi todo `index.wasm` (el runtime de
 Godot). Los dos juegos juntos son unos 80 KB. Es la primera carga; despues queda
