@@ -54,6 +54,18 @@ Dos detalles que hacen que funcione en un servidor estatico cualquiera:
 Probado en Chromium con viewport de movil y eventos tactiles, con y sin cabeceras
 del servidor: en ambos casos el juego carga y responde a los taps.
 
+### Publicacion automatica
+
+`.github/workflows/deploy-web.yml` exporta y publica en GitHub Pages en cada push.
+Corre las pruebas antes de exportar, y cachea Godot para no bajar ~900 MB de
+plantillas en cada corrida.
+
+Para que funcione hay que habilitar Pages una vez:
+**Settings -> Pages -> Source: GitHub Actions**.
+
+Ojo con el peso: el export son ~35 MB, casi todo `index.wasm` (el runtime de
+Godot). El juego en si son 48 KB. Es la primera carga; despues queda cacheado.
+
 ## Pruebas
 
 ```bash

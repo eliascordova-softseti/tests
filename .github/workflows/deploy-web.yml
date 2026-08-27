@@ -1,0 +1,86 @@
+name: Publicar juego web
+
+on:
+  push:
+    branches: [main, claude/godot-gato-game-l1nuo3]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+env:
+  GODOT_VERSION: 4.2.2-stable
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cachear Godot y plantillas de exportación
+        id: cache-godot
+        uses: actions/cache@v4
+        with:
+          path: ~/godot
+          key: godot-${{ env.GODOT_VERSION }}-web
+
+      - name: Descargar Godot y plantillas web
+        if: steps.cache-godot.outputs.cache-hit != 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p ~/godot && cd ~/godot
+          base="https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}"
+          curl -fsSL --retry 5 --retry-delay 3 -O "${base}/Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+          curl -fsSL --retry 5 --retry-delay 3 -O "${base}/Godot_v${GODOT_VERSION}_export_templates.tpz"
+          unzip -q "Godot_v${GODOT_VERSION}_linux.x86_64.zip"
+          # Sólo las plantillas web: el .tpz completo pesa ~900 MB y el resto no se usa.
+          unzip -q "Godot_v${GODOT_VERSION}_export_templates.tpz" 'templates/web_*' 'templates/version.txt'
+          chmod +x "Godot_v${GODOT_VERSION}_linux.x86_64"
+          rm -f ./*.zip ./*.tpz
+
+      - name: Instalar plantillas donde Godot las busca
+        run: |
+          set -euo pipefail
+          dest="$HOME/.local/share/godot/export_templates/${GODOT_VERSION/-/.}"
+          mkdir -p "$dest"
+          cp ~/godot/templates/* "$dest/"
+
+      - name: Importar recursos
+        run: ~/godot/Godot_v${GODOT_VERSION}_linux.x86_64 --headless --path . --import
+
+      - name: Correr pruebas de la lógica
+        run: ~/godot/Godot_v${GODOT_VERSION}_linux.x86_64 --headless --path . --script res://tests/test_board.gd
+
+      - name: Exportar a web
+        run: |
+          set -euo pipefail
+          mkdir -p build/web
+          ~/godot/Godot_v${GODOT_VERSION}_linux.x86_64 --headless --path . \
+            --export-release "Web" build/web/index.html
+          # El service worker que agrega las cabeceras COOP/COEP que Pages no manda.
+          cp web/coi-serviceworker.js build/web/
+          # Sin esto, Pages ignora los archivos que empiezan con guión bajo.
+          touch build/web/.nojekyll
+          test -s build/web/index.wasm
+          test -s build/web/index.pck
+          ls -lh build/web
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
