@@ -33,6 +33,27 @@ y `game_finished(winner)`, y el estado en `cells`, `current_player`, `winner`,
 `win_line` e `is_over`. Agregar una IA después es escribir algo que llame a
 `board.place(cell)` cuando sea el turno de O.
 
+## Exportar a web
+
+El preset `Web` de `export_presets.cfg` ya esta configurado. Con las plantillas
+de exportacion de Godot instaladas:
+
+```bash
+godot --headless --path . --export-release "Web" build/web/index.html
+```
+
+Dos detalles que hacen que funcione en un servidor estatico cualquiera:
+
+- Godot 4 necesita **aislamiento cross-origin** (`SharedArrayBuffer`). Si el
+  servidor no manda `Cross-Origin-Opener-Policy` y `Cross-Origin-Embedder-Policy`,
+  el juego no arranca. GitHub Pages no las manda.
+- Por eso el preset inyecta `coi-serviceworker.js` via `html/head_include`: un
+  service worker que agrega esas cabeceras del lado del cliente. Hay que copiar
+  ese archivo junto al export.
+
+Probado en Chromium con viewport de movil y eventos tactiles, con y sin cabeceras
+del servidor: en ambos casos el juego carga y responde a los taps.
+
 ## Pruebas
 
 ```bash

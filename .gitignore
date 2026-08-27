@@ -3,7 +3,9 @@
 /android/
 
 # Exportaciones
-export_presets.cfg
+# export_presets.cfg se versiona: solo tiene el preset Web, sin credenciales.
+# (Si algun dia agregas un preset de Android con keystore, sacalo de git.)
+build/
 *.translation
 
 # Sistema
