@@ -67,6 +67,11 @@ theme_override_font_sizes/font_size = 20
 text = "X: 0   ·   O: 0   ·   Empates: 0"
 vertical_alignment = 1
 
+[node name="Menu" type="Button" parent="Margin/Layout/Footer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Menú (Esc)"
+
 [node name="Restart" type="Button" parent="Margin/Layout/Footer"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20

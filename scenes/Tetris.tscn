@@ -1,0 +1,271 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://scripts/TetrisMain.gd" id="1_main"]
+[ext_resource type="Script" path="res://scripts/TetrisView.gd" id="2_view"]
+[ext_resource type="Script" path="res://scripts/TetrisPreview.gd" id="3_preview"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+bg_color = Color(0.0627451, 0.0862745, 0.141176, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.427451, 0.466667, 0.576471, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_next"]
+content_margin_left = 12.0
+content_margin_top = 8.0
+content_margin_right = 12.0
+content_margin_bottom = 12.0
+bg_color = Color(0.0627451, 0.0862745, 0.141176, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.427451, 0.466667, 0.576471, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="Tetris" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_main")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0392157, 0.054902, 0.0980392, 1)
+
+[node name="Margin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 18
+
+[node name="Layout" type="VBoxContainer" parent="Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 14
+
+[node name="Title" type="Label" parent="Margin/Layout"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.301961, 0.831373, 0.874510, 1)
+theme_override_font_sizes/font_size = 34
+text = "TETRIS"
+horizontal_alignment = 1
+
+[node name="Play" type="HBoxContainer" parent="Margin/Layout"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 18
+
+[node name="Well" type="Control" parent="Margin/Layout/Play"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.0
+mouse_filter = 2
+script = ExtResource("2_view")
+
+[node name="Panel" type="VBoxContainer" parent="Margin/Layout/Play"]
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="ScoreBox" type="PanelContainer" parent="Margin/Layout/Play/Panel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Box" type="VBoxContainer" parent="Margin/Layout/Play/Panel/ScoreBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Margin/Layout/Play/Panel/ScoreBox/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.607843, 0.647059, 0.717647, 1)
+theme_override_font_sizes/font_size = 16
+text = "PUNTOS"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Margin/Layout/Play/Panel/ScoreBox/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.301961, 0.831373, 0.874510, 1)
+theme_override_font_sizes/font_size = 28
+text = "000000"
+horizontal_alignment = 1
+
+[node name="LevelBox" type="PanelContainer" parent="Margin/Layout/Play/Panel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Box" type="VBoxContainer" parent="Margin/Layout/Play/Panel/LevelBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Margin/Layout/Play/Panel/LevelBox/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.607843, 0.647059, 0.717647, 1)
+theme_override_font_sizes/font_size = 16
+text = "NIVEL"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Margin/Layout/Play/Panel/LevelBox/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.301961, 0.831373, 0.874510, 1)
+theme_override_font_sizes/font_size = 28
+text = "01"
+horizontal_alignment = 1
+
+[node name="LinesBox" type="PanelContainer" parent="Margin/Layout/Play/Panel"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="Box" type="VBoxContainer" parent="Margin/Layout/Play/Panel/LinesBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="Title" type="Label" parent="Margin/Layout/Play/Panel/LinesBox/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.607843, 0.647059, 0.717647, 1)
+theme_override_font_sizes/font_size = 16
+text = "LÍNEAS"
+horizontal_alignment = 1
+
+[node name="Value" type="Label" parent="Margin/Layout/Play/Panel/LinesBox/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.301961, 0.831373, 0.874510, 1)
+theme_override_font_sizes/font_size = 28
+text = "000"
+horizontal_alignment = 1
+
+[node name="NextBox" type="PanelContainer" parent="Margin/Layout/Play/Panel"]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_next")
+
+[node name="Box" type="VBoxContainer" parent="Margin/Layout/Play/Panel/NextBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="Margin/Layout/Play/Panel/NextBox/Box"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.607843, 0.647059, 0.717647, 1)
+theme_override_font_sizes/font_size = 16
+text = "SIGUIENTE"
+horizontal_alignment = 1
+
+[node name="Preview" type="Control" parent="Margin/Layout/Play/Panel/NextBox/Box"]
+custom_minimum_size = Vector2(0, 110)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+script = ExtResource("3_preview")
+
+[node name="Message" type="Label" parent="Margin/Layout"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "Flechas: mover y girar · ESPACIO soltar · P pausa · R nueva"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Touch" type="HBoxContainer" parent="Margin/Layout"]
+visible = false
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Left" type="Button" parent="Margin/Layout/Touch"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Izq"
+
+[node name="Rotate" type="Button" parent="Margin/Layout/Touch"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Girar"
+
+[node name="Right" type="Button" parent="Margin/Layout/Touch"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Der"
+
+[node name="Down" type="Button" parent="Margin/Layout/Touch"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Baja"
+
+[node name="Drop" type="Button" parent="Margin/Layout/Touch"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "Soltar"
+
+[node name="Footer" type="HBoxContainer" parent="Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="Menu" type="Button" parent="Margin/Layout/Footer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Menú (Esc)"
+
+[node name="Restart" type="Button" parent="Margin/Layout/Footer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Reiniciar (R)"

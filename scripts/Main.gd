@@ -2,10 +2,13 @@ extends Control
 ## Pantalla del juego: marcador, mensaje de turno y botón de reinicio.
 ## Toda la lógica del gato vive en Board.gd; aquí sólo se reacciona a sus señales.
 
+const MENU_SCENE := "res://scenes/Menu.tscn"
+
 @onready var _board: GatoBoard = $Margin/Layout/Board
 @onready var _status: Label = $Margin/Layout/Status
 @onready var _score: Label = $Margin/Layout/Footer/Score
 @onready var _restart: Button = $Margin/Layout/Footer/Restart
+@onready var _menu_button: Button = $Margin/Layout/Footer/Menu
 
 var _wins_x := 0
 var _wins_o := 0
@@ -16,14 +19,27 @@ func _ready() -> void:
 	_board.move_made.connect(_on_move_made)
 	_board.game_finished.connect(_on_game_finished)
 	_restart.pressed.connect(_on_restart_pressed)
+	_menu_button.pressed.connect(_on_menu_pressed)
 	_update_status()
 	_update_score()
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+	if not (event is InputEventKey and event.pressed and not event.echo):
+		return
+	if event.keycode == KEY_ESCAPE:
+		# El evento se marca antes de cambiar de escena: después este nodo ya
+		# está saliendo del árbol y get_viewport() se queja.
+		get_viewport().set_input_as_handled()
+		_on_menu_pressed()
+		return
+	if event.keycode == KEY_R:
 		_on_restart_pressed()
 		get_viewport().set_input_as_handled()
+
+
+func _on_menu_pressed() -> void:
+	get_tree().change_scene_to_file(MENU_SCENE)
 
 
 func _on_move_made(_cell: int, _player: int) -> void:

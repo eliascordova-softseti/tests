@@ -2,7 +2,7 @@ name: Publicar juego web
 
 on:
   push:
-    branches: [main, claude/godot-gato-game-l1nuo3]
+    branches: [main, claude/godot-gato-game-l1nuo3, claude/godot-tetris-menu-axsfn0]
   workflow_dispatch:
 
 permissions:
@@ -55,7 +55,11 @@ jobs:
         run: ~/godot/Godot_v${GODOT_VERSION}_linux.x86_64 --headless --path . --import
 
       - name: Correr pruebas de la lógica
-        run: ~/godot/Godot_v${GODOT_VERSION}_linux.x86_64 --headless --path . --script res://tests/test_board.gd
+        run: |
+          set -euo pipefail
+          godot=~/godot/Godot_v${GODOT_VERSION}_linux.x86_64
+          "$godot" --headless --path . --script res://tests/test_board.gd
+          "$godot" --headless --path . --script res://tests/test_tetris.gd
 
       - name: Exportar a web
         run: |
