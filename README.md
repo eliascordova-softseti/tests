@@ -1,5 +1,7 @@
 # Gato (tres en raya) — Godot 4
 
+**Jugar: https://eliascordova-softseti.github.io/tests/**
+
 Juego de gato para **dos jugadores en local**. El tablero se dibuja por completo
 desde código con `_draw()`: no hay sprites ni assets externos, así que el proyecto
 funciona apenas se abre.
@@ -60,8 +62,8 @@ del servidor: en ambos casos el juego carga y responde a los taps.
 Corre las pruebas antes de exportar, y cachea Godot para no bajar ~900 MB de
 plantillas en cada corrida.
 
-Para que funcione hay que habilitar Pages una vez:
-**Settings -> Pages -> Source: GitHub Actions**.
+Pages ya quedo habilitado con `Source: GitHub Actions`; el primer deploy se
+autoconfiguro solo.
 
 Ojo con el peso: el export son ~35 MB, casi todo `index.wasm` (el runtime de
 Godot). El juego en si son 48 KB. Es la primera carga; despues queda cacheado.
